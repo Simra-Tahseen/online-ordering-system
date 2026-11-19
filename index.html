@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spice Garden - Online Food Ordering</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body id="top">
+
+<nav id="nav">
+  <a class="logo" href="#top">🍽️ Spice Garden</a>
+  <div class="nav-links">
+    <a href="#menu">Menu</a>
+    <a href="#admin" id="adminLink" class="hidden">Admin Panel</a>
+    <a href="#" id="ordersLink" class="hidden">My Orders</a>
+  </div>
+  <div class="nav-actions">
+    <button id="themeBtn" class="icon-btn" title="Toggle dark mode">🌙</button>
+    <button id="authBtn" class="btn small">Login</button>
+    <button id="cartBtn" class="icon-btn cart-btn" title="Your cart">🛒<span id="cartCount" class="badge">0</span></button>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="float f1">🍕</span><span class="float f2">🍔</span><span class="float f3">🍜</span>
+  <span class="float f4">🍨</span><span class="float f5">🍛</span><span class="float f6">🍟</span>
+  <div class="hero-content">
+    <p class="tag">⚡ Fast delivery in 30 minutes</p>
+    <h1>Hungry? Order your <span>favorite food</span> online</h1>
+    <p class="sub">Fresh, hot and delicious meals from Spice Garden Restaurant delivered to your doorstep.</p>
+    <a href="#menu" class="btn big">Order Now</a>
+    <div class="stats">
+      <div><b data-count="500">0</b>+<small>Happy Customers</small></div>
+      <div><b data-count="40">0</b>+<small>Dishes</small></div>
+      <div><b data-count="30">0</b> min<small>Avg. Delivery</small></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="menu" class="section">
+    <h2 class="title">Our Food Menu</h2>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="🔍 Search food...">
+      <select id="sort">
+        <option value="default">Sort: Default</option>
+        <option value="low">Price: Low to High</option>
+        <option value="high">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+      </select>
+      <label class="switch"><input type="checkbox" id="vegOnly"> <span>🟢 Veg only</span></label>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="grid" id="menuGrid"></div>
+    <p id="noResult" class="empty hidden">😕 No food items found.</p>
+  </section>
+
+  <section id="admin" class="section hidden">
+    <h2 class="title">Admin Panel – Manage Food Items</h2>
+    <form id="foodForm" class="admin-form">
+      <input type="hidden" id="fId">
+      <input id="fName" placeholder="Food name" required>
+      <input id="fPrice" type="number" min="1" placeholder="Price (₹)" required>
+      <select id="fCat"></select>
+      <select id="fVeg"><option value="veg">Veg</option><option value="non">Non-Veg</option></select>
+      <select id="fEmoji"></select>
+      <button class="btn" id="fSave" type="submit">Add Item</button>
+      <button class="btn ghost hidden" id="fCancel" type="button">Cancel</button>
+    </form>
+    <div class="table-wrap"><table id="adminTable"></table></div>
+  </section>
+</main>
+
+<footer>© 2026 Spice Garden Restaurant · Online Food Ordering System · Made with ❤️</footer>
+
+<!-- Cart drawer -->
+<div id="overlay" class="overlay"></div>
+<aside id="drawer" class="drawer">
+  <div class="drawer-head"><h3>🛒 Your Order</h3><button class="icon-btn" data-close="drawer">✖</button></div>
+  <div id="cartItems" class="cart-items"></div>
+  <div class="drawer-foot">
+    <div class="coupon"><input id="couponInput" placeholder="Coupon code (try FOOD10)"><button class="btn small" id="couponBtn">Apply</button></div>
+    <div id="summary"></div>
+    <button class="btn big full" id="checkoutBtn">Proceed to Checkout</button>
+  </div>
+</aside>
+
+<!-- Auth modal -->
+<div class="modal" id="authModal"><div class="modal-box">
+  <button class="close" data-close="authModal">✖</button>
+  <div class="tabs"><button class="tab active" data-tab="login">Login</button><button class="tab" data-tab="register">Register</button></div>
+  <form id="loginForm">
+    <input id="lEmail" type="email" placeholder="Email" required>
+    <input id="lPass" type="password" placeholder="Password" required>
+    <button class="btn full">Login</button>
+    <p class="hint">Admin demo: admin@food.com / admin123</p>
+  </form>
+  <form id="registerForm" class="hidden">
+    <input id="rName" placeholder="Full name" required>
+    <input id="rEmail" type="email" placeholder="Email" required>
+    <input id="rPass" type="password" minlength="4" placeholder="Password (min 4 chars)" required>
+    <button class="btn full">Create Account</button>
+  </form>
+</div></div>
+
+<!-- Checkout modal -->
+<div class="modal" id="checkoutModal"><div class="modal-box">
+  <button class="close" data-close="checkoutModal">✖</button>
+  <h3>📦 Delivery & Payment</h3>
+  <form id="checkoutForm">
+    <input id="cName" placeholder="Your name" required>
+    <input id="cPhone" type="tel" pattern="[0-9]{10}" placeholder="Phone (10 digits)" required>
+    <textarea id="cAddr" rows="3" placeholder="Delivery address" required></textarea>
+    <select id="cPay"><option>Cash on Delivery</option><option>UPI</option><option>Credit / Debit Card</option></select>
+    <p class="total-line">Amount to pay: <b id="cTotal"></b></p>
+    <button class="btn big full">Place Order</button>
+  </form>
+</div></div>
+
+<!-- Success modal -->
+<div class="modal" id="successModal"><div class="modal-box center">
+  <div class="check">✔</div>
+  <h3>Order Placed Successfully!</h3>
+  <p id="successMsg"></p>
+  <button class="btn" data-close="successModal">Continue</button>
+</div></div>
+
+<!-- Orders modal -->
+<div class="modal" id="ordersModal"><div class="modal-box wide">
+  <button class="close" data-close="ordersModal">✖</button>
+  <h3>🧾 My Orders</h3>
+  <div id="ordersList"></div>
+</div></div>
+
+<div id="toasts"></div>
+<script src="js/app.js"></script>
+</body>
+</html>
